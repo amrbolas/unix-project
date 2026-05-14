@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  # خدمة قاعدة البيانات
+  db:
+    image: mysql:8.0
+    container_name: restaurant_db_container
+    restart: always
+    environment:
+      MYSQL_DATABASE: restaurant_db
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: apppass
+      MYSQL_ROOT_PASSWORD: rootpassword
+    volumes:
+      - ./db/restaurants.sql:/docker-entrypoint-initdb.d/restaurants.sql
+
+  # خدمة سيرفر الويب (التطبيق)
+  web:
+    build: .
+    container_name: restaurant_app_container
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
