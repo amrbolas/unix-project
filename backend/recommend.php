@@ -12,10 +12,14 @@ if ($conn->connect_error) {
     die("Database connection failed");
 }
 
+// تعديل السطر ليصبح غير حساس للحروف (Case-Insensitive) باستخدام LOWER
 $stmt = $conn->prepare(
-    "SELECT name FROM restaurants WHERE meal = ? ORDER BY rating DESC LIMIT 1"
+    "SELECT name FROM restaurants WHERE LOWER(meal) = LOWER(?) ORDER BY rating DESC LIMIT 1"
 );
-$stmt->bind_param("s", $meal);
+
+// تحويل المدخل إلى حروف صغيرة لضمان المطابقة التامة
+$lower_meal = strtolower($meal);
+$stmt->bind_param("s", $lower_meal);
 $stmt->execute();
 $result = $stmt->get_result();
 
