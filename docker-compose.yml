@@ -13,6 +13,7 @@ services:
       MYSQL_ROOT_PASSWORD: rootpassword
     volumes:
       - ./db/restaurants.sql:/docker-entrypoint-initdb.d/restaurants.sql
+      - mysql_data:/var/lib/mysql # لحفظ البيانات وضمان عدم ضياعها عند إيقاف الكونتينر
 
   # خدمة سيرفر الويب (التطبيق)
   web:
@@ -22,3 +23,7 @@ services:
       - "8080:80"
     depends_on:
       - db
+
+# تعريف المكان المخصص على الهاردسك لحفظ بيانات قاعدة البيانات بشكل دائم
+volumes:
+  mysql_data:
